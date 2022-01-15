@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ODataIssue444.Data;
+using ODataIssue444.Data.Entities;
 using ODataIssue444.Infrastructure;
 
 namespace ODataIssue444
@@ -79,6 +80,43 @@ namespace ODataIssue444
 
                 endpoints.MapRazorPages();
             });
+
+            SeedData(serviceProvider);
+        }
+
+        private void SeedData(IServiceProvider serviceProvider)
+        {
+            var personRepository = serviceProvider.GetRequiredService<IRepository<Person>>();
+            if (personRepository.Count() == 0)
+            {
+                personRepository.Insert(new List<Person>
+                {
+                    new Person { FamilyName = "Jordan", GivenNames = "Michael", DateOfBirth = new DateTime(1963, 2, 17) },
+                    new Person { FamilyName = "Johnson", GivenNames = "Dwayne", DateOfBirth = new DateTime(1972, 5, 2) },
+                    new Person { FamilyName = "Froning", GivenNames = "Rich", DateOfBirth = new DateTime(1987, 7, 21) }
+                });
+            }
+
+            var languageRepository = serviceProvider.GetRequiredService<IRepository<Language>>();
+            if (languageRepository.Count() == 0)
+            {
+                languageRepository.Insert(new List<Language>
+                {
+                    new Language { Id = Guid.NewGuid(), CultureCode = "en-US", Name = "English (United States)", IsEnabled = true },
+                    new Language { Id = Guid.NewGuid(), CultureCode = "jp-JP", Name = "Japanese (Japan)", IsEnabled = true }
+                });
+            }
+
+            var localizableStringRepository = serviceProvider.GetRequiredService<IRepository<LocalizableString>>();
+            if (localizableStringRepository.Count() == 0)
+            {
+                localizableStringRepository.Insert(new List<LocalizableString>
+                {
+                    new LocalizableString { Id = Guid.NewGuid(), CultureCode = null, TextKey = "Hello", TextValue = "Hello" }, // Invariant
+                    new LocalizableString { Id = Guid.NewGuid(), CultureCode = "en-US", TextKey = "Hello", TextValue = "Hello" },
+                    new LocalizableString { Id = Guid.NewGuid(), CultureCode = "jp-JP", TextKey = "Hello", TextValue = "こんにちは" }
+                });
+            }
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

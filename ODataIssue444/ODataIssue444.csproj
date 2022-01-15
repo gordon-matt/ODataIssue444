@@ -6,8 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Localization\Views\**" />
+    <Content Remove="Areas\Admin\Localization\Views\**" />
+    <EmbeddedResource Remove="Areas\Admin\Localization\Views\**" />
+    <None Remove="Areas\Admin\Localization\Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
+    <PackageReference Include="Extenso.AspNetCore.Mvc.ExtensoUI" Version="5.0.0" />
     <PackageReference Include="Extenso.AspNetCore.OData" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.12" />

@@ -2,7 +2,9 @@
 using Extenso.AspNetCore.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using ODataIssue444.Areas.Admin.Localization.Models;
 using ODataIssue444.Data.Entities;
 
 namespace ODataIssue444.Infrastructure
@@ -25,6 +27,27 @@ namespace ODataIssue444.Infrastructure
         {
             ODataModelBuilder builder = new ODataConventionModelBuilder(services);
             builder.EntitySet<Person>("PersonApi");
+
+            // Localization
+            builder.EntitySet<Language>("LanguageApi");
+            builder.EntitySet<LocalizableString>("LocalizableStringApi");
+
+            //var resetLocalizableStringsAction = builder.EntityType<Language>().Collection.Action("ResetLocalizableStrings");
+            //resetLocalizableStringsAction.Returns<IActionResult>();
+
+            var getComparitiveTableFunction = builder.EntityType<LocalizableString>().Collection.Function("GetComparitiveTable");
+            getComparitiveTableFunction.Parameter<string>("cultureCode");
+            getComparitiveTableFunction.Returns<IActionResult>();
+
+            var putComparitiveAction = builder.EntityType<LocalizableString>().Collection.Action("PutComparitive");
+            putComparitiveAction.Parameter<string>("cultureCode");
+            putComparitiveAction.Parameter<string>("key");
+            putComparitiveAction.Parameter<ComparitiveLocalizableString>("entity");
+
+            var deleteComparitiveAction = builder.EntityType<LocalizableString>().Collection.Action("DeleteComparitive");
+            deleteComparitiveAction.Parameter<string>("cultureCode");
+            deleteComparitiveAction.Parameter<string>("key");
+
             return builder;
         }
     }
