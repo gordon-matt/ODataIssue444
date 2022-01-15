@@ -2,8 +2,11 @@ This repo's purpose is to show the problem with OData functions not working when
 
 See issue: https://github.com/OData/AspNetCoreOData/issues/444
 
+```
 .NET 5: `master` branch (works fine)
+
 .NET 6: `develop` branch (broken)
+```
 
 Try one of these test URLs:
 
