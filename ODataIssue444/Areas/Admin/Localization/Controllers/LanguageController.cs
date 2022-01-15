@@ -4,10 +4,10 @@ namespace ODataIssue444.Areas.Admin.Localization.Controllers
 {
     [Area("Admin/Localization")]
     [Route("admin/localization/languages")]
-    public class LanguageController : Controller
+    public class LanguageController : Microsoft.AspNetCore.Mvc.Controller
     {
         [Route("")]
-        public ActionResult Index()
+        public Microsoft.AspNetCore.Mvc.ActionResult Index()
         {
             return View();
         }

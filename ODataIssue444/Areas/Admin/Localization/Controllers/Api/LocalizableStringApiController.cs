@@ -3,9 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Extenso.AspNetCore.OData;
 using Extenso.Data.Entity;
-using Microsoft.AspNet.OData;
-using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Formatter;
+using Microsoft.AspNetCore.OData.Query;
 using ODataIssue444.Areas.Admin.Localization.Models;
 using ODataIssue444.Data.Entities;
 

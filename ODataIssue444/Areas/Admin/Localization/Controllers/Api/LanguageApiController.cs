@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Extenso.AspNetCore.OData;
 using Extenso.Data.Entity;
-using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Formatter;
 using ODataIssue444.Data.Entities;
 
 namespace ODataIssue444.Areas.Admin.Localization.Controllers.Api

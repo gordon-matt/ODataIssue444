@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac;
 using Extenso.AspNetCore.OData;
 using Extenso.Data.Entity;
-using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,9 +38,17 @@ namespace ODataIssue444
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddOData();
+            services.AddControllersWithViews()
+                .AddOData((options, serviceProvider) =>
+                {
+                    options.Select().Expand().Filter().OrderBy().SetMaxTop(null).Count();
 
-            services.AddControllersWithViews();
+                    var registrars = serviceProvider.GetRequiredService<IEnumerable<IODataRegistrar>>();
+                    foreach (var registrar in registrars)
+                    {
+                        registrar.Register(options);
+                    }
+                });
             services.AddRazorPages();
         }
 
@@ -70,14 +77,6 @@ namespace ODataIssue444
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.Select().Expand().Filter().OrderBy().MaxTop(null).Count();
-
-                var registrars = serviceProvider.GetRequiredService<IEnumerable<IODataRegistrar>>();
-                foreach (var registrar in registrars)
-                {
-                    registrar.Register(endpoints, app.ApplicationServices);
-                }
-
                 endpoints.MapRazorPages();
             });
 

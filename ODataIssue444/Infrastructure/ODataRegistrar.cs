@@ -1,9 +1,7 @@
-﻿using System;
-using Extenso.AspNetCore.OData;
-using Microsoft.AspNet.OData.Builder;
-using Microsoft.AspNet.OData.Extensions;
+﻿using Extenso.AspNetCore.OData;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OData.ModelBuilder;
 using ODataIssue444.Areas.Admin.Localization.Models;
 using ODataIssue444.Data.Entities;
 
@@ -11,21 +9,9 @@ namespace ODataIssue444.Infrastructure
 {
     public class ODataRegistrar : IODataRegistrar
     {
-        public void Register(IRouteBuilder routes, IServiceProvider services)
+        public void Register(ODataOptions options)
         {
-            var builder = GetBuilder(services);
-            routes.MapODataServiceRoute("OData", "odata", builder.GetEdmModel());
-        }
-
-        public void Register(IEndpointRouteBuilder endpoints, IServiceProvider services)
-        {
-            var builder = GetBuilder(services);
-            endpoints.MapODataRoute("OData", "odata", builder.GetEdmModel());
-        }
-
-        private ODataModelBuilder GetBuilder(IServiceProvider services)
-        {
-            ODataModelBuilder builder = new ODataConventionModelBuilder(services);
+            ODataModelBuilder builder = new ODataConventionModelBuilder();
             builder.EntitySet<Person>("PersonApi");
 
             // Localization
@@ -48,7 +34,7 @@ namespace ODataIssue444.Infrastructure
             deleteComparitiveAction.Parameter<string>("cultureCode");
             deleteComparitiveAction.Parameter<string>("key");
 
-            return builder;
+            options.AddRouteComponents("odata", builder.GetEdmModel());
         }
     }
 }

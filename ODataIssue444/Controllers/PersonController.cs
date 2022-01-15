@@ -3,7 +3,7 @@
 namespace ODataIssue444.Controllers
 {
     [Route("people")]
-    public class PersonController : Controller
+    public class PersonController : Microsoft.AspNetCore.Mvc.Controller
     {
         [Route("")]
         public IActionResult Index()
